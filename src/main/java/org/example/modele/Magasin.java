@@ -1,8 +1,6 @@
 package org.example.modele;
 
 import jakarta.persistence.*;
-import org.example.bdd.Bdd;
-import org.example.controleur.MaterielDAO;
 import org.example.vue.VueConsole;
 
 import java.sql.ResultSet;
@@ -10,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Entity
@@ -25,8 +24,46 @@ public class Magasin {
 
     private String adresseMagasin;
 
-    @OneToMany(mappedBy = "idClient")
-    private List<Client> Client;
+    //Un magasin peut avoir plusieurs clients
+    @OneToMany(mappedBy = "magasin")
+    private List<Client> clients;
+
+    //Un magasin peut avoir plusieurs matériels
+    @ManyToMany(mappedBy = "magasins")
+    private List<Materiel> materiels;
+
+    //Un magasin peut avoir plusieurs materiel avec une quantite
+    @ElementCollection
+    @CollectionTable(name="posseder", joinColumns=@JoinColumn(name="idMagasin"), uniqueConstraints = @UniqueConstraint(columnNames = {"idMagasin", "idMateriel"}))
+    @MapKeyJoinColumn(name="idMateriel")
+    @Column(name="quantite")
+    private Map<Materiel, Integer> quantiteMateriel;
+
+    public List<Client> getClients() {
+        return clients;
+    }
+
+    public void setClients(List<Client> clients) {
+        this.clients = clients;
+    }
+
+    public List<Materiel> getMateriels() {
+        return materiels;
+    }
+
+    public void setMateriels(List<Materiel> materiels) {
+        this.materiels = materiels;
+    }
+
+    public Map<Materiel, Integer> getQuantiteMateriel() {
+        return quantiteMateriel;
+    }
+
+    public void setQuantiteMateriel(Map<Materiel, Integer> quantiteMateriel) {
+        this.quantiteMateriel = quantiteMateriel;
+    }
+
+
 
     // Constructeurs
     public Magasin() {
@@ -75,92 +112,21 @@ public class Magasin {
         this.adresseMagasin = adresseMagasin;
     }
 
-    /*public HashMap<Materiel, Integer> getStockMateriel() {
-        return stockMateriel;
-    }*/
-
-    /*public void setStockMateriel(HashMap<Materiel, Integer> stockMateriel) {
-        this.stockMateriel = stockMateriel;
-    }*/
-
     // Méthodes
 
-    /*public void ajouterMateriel(int idMateriel, int quantite) {
-
-        Materiel Key_to_use = null;
-        for(Materiel key : stockMateriel.keySet()){
-            if (key.getIdMateriel() == idMateriel){
-                Key_to_use = key;
-                break;
-            }
+    public int MiseAJourDuStock(Materiel materiel, int quantite) {
+        int quantiteDisponible = this.quantiteMateriel.get(materiel);
+        if (quantite - quantiteDisponible > 0) {
+            this.quantiteMateriel.put(materiel, quantiteDisponible - quantite);
         }
-        if (Key_to_use != null) {
-            int newValue = this.stockMateriel.get(Key_to_use) + quantite;
-            if (newValue < 0){
-                retirerMateriel(idMateriel);
-            }
-            this.stockMateriel.replace(Key_to_use, this.stockMateriel.get(Key_to_use) + quantite);
-        } else {
-            this.stockMateriel.put(MaterielDAO.getMateriel(idMateriel), quantite);
+        else if (quantite - quantiteDisponible == 0) {
+            this.quantiteMateriel.remove(materiel);
         }
-    }*/
-
-    /*public void retirerMateriel(int idMateriel) {
-
-        Materiel Key_to_Delete = null;
-        for(Materiel key : stockMateriel.keySet()){
-            if (key.getIdMateriel() == idMateriel){
-                Key_to_Delete = key;
-                break;
-            }
+        else{
+            return -1;
         }
-
-        if (Key_to_Delete != null){
-            this.stockMateriel.remove(Key_to_Delete);
-        }
-    }*/
-
-    /*public void replaceMateriel(int idMateriel, int quantite){
-
-        if (quantite == 0){
-            retirerMateriel(idMateriel);
-        } else if (!stockMateriel.containsKey(idMateriel)) {
-            stockMateriel.put(MaterielDAO.getMateriel(idMateriel), quantite);
-        } else{
-            for(Materiel key : stockMateriel.keySet()) {
-                if (key.getIdMateriel() == idMateriel) {
-                    stockMateriel.replace(key, stockMateriel.get(key), quantite);
-                }
-            }
-        }
-    }*/
+        return 0;
+    }
 
 
-    /*public int verifyDisponibility(int idMateriel, int quantite){
-
-        for (Materiel m : this.getStockMateriel().keySet()){
-            if ( m.getIdMateriel() == idMateriel){
-                if(this.getStockMateriel().get(m) >= quantite){
-                    return idMateriel;
-                }else{
-                    int newMateriel = MaterielDAO.getMateriel(idMateriel).getMaterielSubstitutionId();
-                    if (newMateriel != -1){
-                        return verifyDisponibility(newMateriel, quantite);
-                    }
-                    break;
-                }
-            }
-        }
-        return -1;
-    }*/
-
-    /*public void miseAJourDuStock(HashMap<Integer, Integer> listeMateriel) {
-            for (int idMateriel : listeMateriel.keySet()) {
-                if (this.getStockMateriel().get(idMateriel) - listeMateriel.get(idMateriel) >= 0) {
-
-                }
-                int quantite = listeMateriel.get(idMateriel);
-
-            }
-    }*/
 }

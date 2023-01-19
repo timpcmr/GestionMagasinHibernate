@@ -1,5 +1,9 @@
 package org.example.vue;
 
+import org.example.modele.Client;
+import org.example.modele.Magasin;
+import org.example.modele.Materiel;
+
 import java.util.Scanner;
 
 public class VueConsole {
@@ -66,4 +70,31 @@ public class VueConsole {
         System.out.println(message);
     }
 
+    // AFFICHAGE DES OBJETS
+
+    public static String affichageClient(Client client){
+        String objet = "/-------------"+ client.getPrenomClient() + " " + client.getNomClient() + "------------\\ \n" +
+                "* Client n°" + client.getIdClient() + "\n" +
+                "* Adresse : " + client.getAdresseClient() + "\n" +
+                "* Téléphone : " + client.getTelephoneClient() + "\n" +
+                "* Magasin : " + client.getMagasin().getNomMagasin();
+
+        System.out.println(objet);
+        return objet;
+    }
+
+    public static String affichageMagasin(Magasin magasin){
+        String result = "/ Magasin : " + magasin.getNomMagasin() + " - (Identifiant : "+ magasin.getIdMagasin() + ") - " + magasin.getAdresseMagasin() + " \\ \n"
+                + "Stock : \n";
+        if(magasin.getQuantiteMateriel().isEmpty()){
+            result += "Le magasin a un stock vide !";
+        }
+        else {
+            for (Materiel key : magasin.getQuantiteMateriel().keySet()) {
+                result += key.getNomMateriel() + " : " + magasin.getQuantiteMateriel().get(key) + "\n";
+            }
+        }
+        System.out.println(result);
+        return result;
+    }
 }

@@ -1,6 +1,8 @@
 package org.example.modele;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+import java.util.List;
+import java.util.Map;
 
 
 @Entity
@@ -18,8 +20,23 @@ public class Client {
 
     private String telephoneClient;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    //Un client peut avoir un seul magasin référencé par idMagasin
+
+    @ManyToOne
+    @JoinColumn(name="idMagasin")
     private Magasin magasin;
+
+    //Un client peut avoir plusieurs commandes
+    @OneToMany(mappedBy = "client")
+    private List<Commande> commandes;
+
+    //Un client a un seuil par catégorie de matériel
+    @ElementCollection
+    @CollectionTable(name="seuil", joinColumns = @JoinColumn(name="idClient"), uniqueConstraints = @UniqueConstraint(columnNames = {"idClient", "idCategorieMateriel"}))
+    @MapKeyJoinColumn(name="idCategorieMateriel")
+    @Column(name="seuil")
+    private Map<String, Integer> seuil;
+
 
     public Client() {
         this.idClient = -1;
@@ -90,4 +107,29 @@ public class Client {
         this.magasin = magasin;
     }
 
+    public List<Commande> getCommandes() {
+        return commandes;
+    }
+
+    public void setCommandes(List<Commande> commandes) {
+        this.commandes = commandes;
+    }
+
+    public Map<String, Integer> getSeuil() {
+        return seuil;
+    }
+
+    public void setSeuil(Map<String, Integer> seuil) {
+        this.seuil = seuil;
+    }
+
+    // Méthodes
+
+    public void MiseAJourDuSeuil(String categorieMateriel, int quantite){
+        for (String key : seuil.keySet()){
+            if (key.equals(categorieMateriel)){
+                seuil.put(key, seuil.get(key) - quantite);
+            }
+        }
+    }
 }

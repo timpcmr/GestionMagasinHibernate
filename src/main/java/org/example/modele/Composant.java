@@ -1,9 +1,8 @@
 package org.example.modele;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Composant {
@@ -15,6 +14,11 @@ public class Composant {
     private int idComposant;
 
     private String nomComposant;
+
+    //Un composant peut avoir plusieurs matériaux
+    @ManyToMany
+    private List<Materiel> materiels;
+
 
     // Constructeurs
     public Composant() {

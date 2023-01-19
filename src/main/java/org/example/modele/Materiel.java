@@ -1,8 +1,8 @@
 package org.example.modele;
 
 import jakarta.persistence.*;
-import org.example.controleur.ComposantDAO;
-import org.example.controleur.MaterielDAO;
+import java.util.List;
+import java.util.Map;
 
 import java.util.HashMap;
 
@@ -16,27 +16,44 @@ public class Materiel {
 
     private String nomMateriel;
 
-    private String categorieMateriel;
 
+    //Un matériel peut avoir plusieurs composants
+    @ManyToMany(mappedBy = "materiels")
+    private List<Composant> composants;
 
+    //Un matériel a une catégorie
+    @ManyToOne
+    @JoinColumn(name="idCategorieMateriel")
+    private CategorieMateriel categorie;
+
+    //Chaque matériel a une quantité de composant
+    @ElementCollection
+    @CollectionTable(name="quantite_composant", joinColumns = @JoinColumn(name="idMateriel"), uniqueConstraints = @UniqueConstraint(columnNames = {"idMateriel", "idComposant"}))
+    @MapKeyJoinColumn(name="idComposant")
+    @Column(name="quantite")
+    private Map<Composant, Integer> quantiteComposant;
+
+    //Un matériel a un matériel de substitution
     @OneToOne
+    @JoinColumn(name="materielSubstitution")
     private Materiel materielSubstitution;
+
+    //Un matériel peut avoir plusieurs magasins
+    @ManyToMany
+    private List<Magasin> magasins;
+
 
     // Constructeurs
 
     public Materiel() {
         this.idMateriel = -1;
         this.nomMateriel = "";
-        this.categorieMateriel = "";
-        //this.quantiteComposant = new HashMap<>();
         this.materielSubstitution = null;
     }
 
     public Materiel(int idMateriel, String nomMateriel, String categorieMateriel) {
         this.idMateriel = idMateriel;
         this.nomMateriel = nomMateriel;
-        this.categorieMateriel = categorieMateriel;
-        //this.quantiteComposant = new HashMap<>();
         this.materielSubstitution = null;
 
     }
@@ -44,8 +61,6 @@ public class Materiel {
     public Materiel(int idMateriel, String nomMateriel, String categorieMateriel, HashMap<Composant, Integer> quantiteComposant, Materiel materielSubstitution) {
         this.idMateriel = idMateriel;
         this.nomMateriel = nomMateriel;
-        this.categorieMateriel = categorieMateriel;
-        //this.quantiteComposant = quantiteComposant;
         this.materielSubstitution = materielSubstitution;
 
     }
@@ -67,13 +82,6 @@ public class Materiel {
         this.nomMateriel = nomMateriel;
     }
 
-    public String getCategorieMateriel() {
-        return categorieMateriel;
-    }
-
-    public void setCategorieMateriel(String categorieMateriel) {
-        this.categorieMateriel = categorieMateriel;
-    }
 
     /*public HashMap<Composant, Integer> getQuantiteComposant() {
         return quantiteComposant;
@@ -154,5 +162,35 @@ public class Materiel {
         }
     }*/
 
+    public List<Composant> getComposants() {
+        return composants;
+    }
 
+    public void setComposants(List<Composant> composants) {
+        this.composants = composants;
+    }
+
+    public CategorieMateriel getCategorie() {
+        return categorie;
+    }
+
+    public void setCategorie(CategorieMateriel categorie) {
+        this.categorie = categorie;
+    }
+
+    public Map<Composant, Integer> getQuantiteComposant() {
+        return quantiteComposant;
+    }
+
+    public void setQuantiteComposant(Map<Composant, Integer> quantiteComposant) {
+        this.quantiteComposant = quantiteComposant;
+    }
+
+    public List<Magasin> getMagasins() {
+        return magasins;
+    }
+
+    public void setMagasins(List<Magasin> magasins) {
+        this.magasins = magasins;
+    }
 }
