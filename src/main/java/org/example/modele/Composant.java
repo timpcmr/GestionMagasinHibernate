@@ -26,6 +26,7 @@ public class Composant {
         this.nomComposant = "";
     }
 
+
     public Composant(int idComposant, String nomComposant) {
         this.idComposant = idComposant;
         this.nomComposant = nomComposant;
@@ -48,5 +49,12 @@ public class Composant {
         this.nomComposant = nomComposant;
     }
 
+    public List<Materiel> getMateriels() {
+        return materiels;
+    }
+
+    public void setMateriels(List<Materiel> materiels) {
+        this.materiels = materiels;
+    }
 
 }

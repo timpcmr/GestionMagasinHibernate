@@ -1,7 +1,12 @@
 package org.example.controleur;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
+import org.example.modele.Composant;
 import org.example.modele.Materiel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MaterielDAO {
     private final EntityManager em;
@@ -14,20 +19,12 @@ public class MaterielDAO {
         return em.find(Materiel.class, id);
     }
 
-    public List<Materiel> findCommandeByComposant(Composant){
+    public Materiel findByName (String nom){
+        Materiel materiel;
+        String queryString = "from Materiel where Materiel.nomMateriel = :nom";
+        Query query = em.createQuery(queryString).setParameter("nom", nom);
 
-        List<Materiel> materiaux = new ArrayList<>();
-
-        String stringQuery = "from Commande where Commande.client = :client";
-        Query query = em.createQuery(stringQuery).setParameter("client", idClient);
-
-        List<Object[]> resultList = query.getResultList();
-
-        for (Object[] result : resultList){
-            Commande commande = (Commande) result[1];
-            commandes.add(commande);
-        }
-
-        return commandes;
+        return (Materiel) query.getSingleResult();
     }
+
 }

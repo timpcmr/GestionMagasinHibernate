@@ -128,5 +128,20 @@ public class Magasin {
         return 0;
     }
 
+    public Materiel verifyDisponibility(Materiel materiel, int quantite){
+        if (this.getQuantiteMateriel().containsKey(materiel)){
+            if (this.getQuantiteMateriel().get(materiel) >= quantite){
+                return materiel;
+            }
+            else{
+                if (materiel.getMaterielSubstitution() != null){
+                    return verifyDisponibility(materiel.getMaterielSubstitution(), quantite);
+                }
+            }
+        }
+        return null;
+    }
+
+
 
 }

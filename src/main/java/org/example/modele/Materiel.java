@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 @Entity
 public class Materiel {
@@ -82,15 +83,6 @@ public class Materiel {
         this.nomMateriel = nomMateriel;
     }
 
-
-    /*public HashMap<Composant, Integer> getQuantiteComposant() {
-        return quantiteComposant;
-    }*/
-
-    /*public void setQuantiteComposant(HashMap<Composant, Integer> quantiteComposant) {
-        this.quantiteComposant = quantiteComposant;
-    }*/
-
     public Materiel getMaterielSubstitution() {
 
         return this.materielSubstitution;
@@ -104,63 +96,11 @@ public class Materiel {
         this.materielSubstitution = materielSubstitution;
     }
 
-    /*public Integer getQuantityOfComposant(int idComposant) {
 
-        Composant Key_to_use = null;
-        for(Composant key : quantiteComposant.keySet()){
-            if (key.getIdComposant() == idComposant){
-                Key_to_use = key;
-                break;
-            }
-        }
-
-        if (Key_to_use != null){
-            return quantiteComposant.get(Key_to_use);
-        }
-
-        return 0;
-    }*/
-    // Méthodes
-
-    /*public void ajouterComposant(int idComposant, int quantite) {
-
-        Composant Key_to_use = null;
-        for(Composant key : quantiteComposant.keySet()){
-            if (key.getIdComposant() == idComposant){
-                Key_to_use = key;
-                break;
-            }
-        }*/
-
-
-        /*if (Key_to_use != null) {
-            int newValue = this.quantiteComposant.get(Key_to_use) + quantite;
-            if (newValue < 0){
-                retirerComposant(idComposant);
-            }
-
-            this.quantiteComposant.replace(Key_to_use, newValue);
-        } else {
-            this.quantiteComposant.put(ComposantDAO.getComposant(idComposant), quantite);
-        }
-    }*/
 
     public void replaceComposantQuantity(int idComposant, int quantite){
 
     }
-
-    /*public void retirerComposant(int idComposant) {
-        Composant Key_to_delete = null;
-        for(Composant key : quantiteComposant.keySet()){
-            if (key.getIdComposant() == idComposant){
-                Key_to_delete = key;
-                break;
-            }
-        }
-        if (Key_to_delete != null) {
-            this.quantiteComposant.remove(Key_to_delete);
-        }
-    }*/
 
     public List<Composant> getComposants() {
         return composants;
@@ -192,5 +132,18 @@ public class Materiel {
 
     public void setMagasins(List<Magasin> magasins) {
         this.magasins = magasins;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Materiel materiel = (Materiel) o;
+        return idMateriel == materiel.idMateriel && nomMateriel.equals(materiel.nomMateriel) && categorie.equals(materiel.categorie) && Objects.equals(materielSubstitution, materiel.materielSubstitution);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idMateriel, nomMateriel, categorie, materielSubstitution);
     }
 }

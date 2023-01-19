@@ -1,6 +1,8 @@
 package org.example.modele;
 
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
@@ -40,13 +42,15 @@ public class Commande {
         this.client = null;
         this.magasin = null;
         this.quantiteMateriel = new HashMap<>();
+        this.materiels = new ArrayList<>();
     }
 
-    public Commande(int idCommande, Client client, Magasin magasin, Map<Materiel, Integer> quantiteMateriel) {
-        this.idCommande = idCommande;
+    public Commande(Client client, Magasin magasin, Map<Materiel, Integer> quantiteMateriel) {
         this.client = client;
         this.magasin = magasin;
         this.quantiteMateriel = quantiteMateriel;
+        this.materiels = new ArrayList<>();
+        this.materiels.addAll(quantiteMateriel.keySet());
     }
 
     // Getters et Setters

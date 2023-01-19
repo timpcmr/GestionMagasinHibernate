@@ -132,4 +132,18 @@ public class Client {
             }
         }
     }
+
+    public boolean verificationSeuil(String categorieMateriel, int quantite){
+        for (String key : seuil.keySet()){
+            if (key.equals(categorieMateriel)){
+                if (seuil.get(key) - quantite < 0){
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

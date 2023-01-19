@@ -23,4 +23,11 @@ public class MagasinDAO {
 
         return (Magasin)query.getSingleResult();
     }
+
+    public Magasin findMagasinByName(String nom){
+        String stringQuery = "from Magasin where Magasin.nomMagasin = :nom";
+        Query query = em.createQuery(stringQuery).setParameter("nom", nom);
+
+        return (Magasin)query.getSingleResult();
+    }
 }

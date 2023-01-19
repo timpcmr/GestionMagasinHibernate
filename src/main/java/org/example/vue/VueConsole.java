@@ -1,9 +1,12 @@
 package org.example.vue;
 
-import org.example.modele.Client;
-import org.example.modele.Magasin;
-import org.example.modele.Materiel;
+import jakarta.persistence.EntityManager;
+import org.example.controleur.MaterielDAO;
+import org.example.modele.*;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class VueConsole {
@@ -57,6 +60,49 @@ public class VueConsole {
         return scanner5.nextInt();
     }
 
+    public static Commande saisieCommande (Client client, Magasin magasin, EntityManager em) {
+        Map<Materiel, Integer> materiauxCommande = new HashMap<>();
+        Scanner scanner = new Scanner(System.in);
+        MaterielDAO materielDAO = new MaterielDAO(em);
+
+        System.out.println("Début de la commande. Entrez le nom du materiel désiré. Pour terminer votre commande, tapez fin");
+        String nomMateriel = scanner.next();
+        while (!nomMateriel.equals("fin")) {
+            Materiel materielSelectionne = materielDAO.findByName(nomMateriel);
+
+            // Vérification de l'existence du matériel
+            if(magasin.getQuantiteMateriel().containsKey(materielSelectionne)){
+                System.out.println("Combien en souhaitez-vous ? ");
+                int quantite = scanner.nextInt();
+
+                // Vérification de la quantité disponible
+                Materiel newMateriel = magasin.verifyDisponibility(materielSelectionne, quantite);
+                boolean respectSeuil = client.verificationSeuil(newMateriel.getCategorie().getNomCategorieMateriel(), quantite);
+
+                if (!newMateriel.equals(materielSelectionne) && newMateriel != null) {
+                    System.out.println("Le materiel sélectionné n'était pas disponible en quantité suffisante, il a été substitué");
+                }
+                // Ajout du matériel à la commande
+                if (newMateriel == null) {
+                    System.out.println("Le matériel n'est pas disponible en quantité suffisante dans ce magasin");
+                }else{
+                    if (respectSeuil) {
+                        materiauxCommande.put(newMateriel, quantite);
+                    } else {
+                        System.out.println("Le matériel n'a pas été ajouté à la commande car le seuil de commande a été atteint");
+                    }
+                }
+                System.out.println("Entrez un nouveau nom de matériel ou tapez fin pour terminer votre commande : ");
+            }
+            else{
+                System.out.println("Ce matériel n'est pas disponible dans ce magasin. Entrez un nouveau nom de matériel ou tapez fin pour terminer votre commande : ");
+            }
+            nomMateriel = scanner.next();
+        }
+
+        return new Commande(client, magasin, materiauxCommande);
+    }
+
     // AFFICHAGE DES ERREURS
     public static void afficherException(Exception e){
         System.out.println("Une exception a été levée : " + e.getMessage());
@@ -70,10 +116,26 @@ public class VueConsole {
         System.out.println(message);
     }
 
+    // AFFICHAGE DE LISTES
+
+    public static String afficherListe(List<?> liste, Class<?> classe){
+        String message = "Voici la liste des objets de la classe" + classe.getSimpleName() + " : ";
+        for (var o : liste){
+            switch (classe.getSimpleName()){
+                case "Magasin" -> {VueConsole.affichageMagasin((Magasin) o);}
+                case "Client" -> {VueConsole.affichageClient((Client) o);}
+                case "Materiel" -> {VueConsole.affichageMateriel((Materiel) o);}
+                case "Commande" -> {VueConsole.affichageCommande((Commande) o);}
+                case "Composant" -> {VueConsole.affichageComposant((Composant) o);}
+            }
+        }
+        return message;
+    }
+
     // AFFICHAGE DES OBJETS
 
     public static String affichageClient(Client client){
-        String objet = "/-------------"+ client.getPrenomClient() + " " + client.getNomClient() + "------------\\ \n" +
+        String objet = "\n\n/-------------"+ client.getPrenomClient() + " " + client.getNomClient() + "------------\\ \n" +
                 "* Client n°" + client.getIdClient() + "\n" +
                 "* Adresse : " + client.getAdresseClient() + "\n" +
                 "* Téléphone : " + client.getTelephoneClient() + "\n" +
@@ -84,7 +146,7 @@ public class VueConsole {
     }
 
     public static String affichageMagasin(Magasin magasin){
-        String result = "/ Magasin : " + magasin.getNomMagasin() + " - (Identifiant : "+ magasin.getIdMagasin() + ") - " + magasin.getAdresseMagasin() + " \\ \n"
+        String result = "\n\n/ Magasin : " + magasin.getNomMagasin() + " - (Identifiant : "+ magasin.getIdMagasin() + ") - " + magasin.getAdresseMagasin() + " \\ \n"
                 + "Stock : \n";
         if(magasin.getQuantiteMateriel().isEmpty()){
             result += "Le magasin a un stock vide !";
@@ -95,6 +157,33 @@ public class VueConsole {
             }
         }
         System.out.println(result);
+        return result;
+    }
+
+    public static String affichageMateriel(Materiel materiel){
+        String valeur = "Materiel : \n" +
+                "Identifiant = " + materiel.getIdMateriel() +
+                "\nNom = " + materiel.getNomMateriel() +
+                "\nCatégorie = " + materiel.getCategorie() + '\n';
+        for(Composant key : materiel.getQuantiteComposant().keySet()){
+            valeur += affichageComposant(key) + " | Quantité : " + materiel.getQuantiteComposant().get(key) + '\n';
+        }
+        System.out.println(valeur);
+        return valeur;
+    }
+
+    public static String affichageComposant (Composant composant){
+        String valeur = "Composant [Identifiant = " + composant.getIdComposant() + ", Nom = " + composant.getNomComposant() + "]";
+        System.out.println(valeur);
+        return valeur;
+    }
+
+    public static String affichageCommande(Commande commande){
+        String result = "";
+        result += "Commande de" + commande.getClient().getPrenomClient() + commande.getClient().getNomClient() + " pour le magasin " + commande.getMagasin().getNomMagasin() + "\n";
+        for (Materiel key : commande.getMateriels().keySet()){
+            result += key.getNomMateriel() + " | Quantité : " + commande.getMateriels().get(key) + "\n";
+        }
         return result;
     }
 }
