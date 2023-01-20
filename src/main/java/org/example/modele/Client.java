@@ -125,25 +125,22 @@ public class Client {
 
     // Méthodes
 
-    /*public void MiseAJourDuSeuil(String categorieMateriel, int quantite){
-        for (String key : seuil.keySet()){
-            if (key.equals(categorieMateriel)){
-                seuil.put(key, seuil.get(key) - quantite);
+    public void MiseAJourSeuil(CategorieMateriel categorieMateriel, int seuil) {
+        for (Map.Entry<CategorieMateriel, Integer> entry : this.seuil.entrySet()) {
+            if (entry.getKey().getIdCategorieMateriel() == categorieMateriel.getIdCategorieMateriel()) {
+                entry.setValue(seuil);
             }
         }
-    }*/
+    }
 
-    /*public boolean verificationSeuil(String categorieMateriel, int quantite){
-        for (String key : seuil.keySet()){
-            if (key.equals(categorieMateriel)){
-                if (seuil.get(key) - quantite < 0){
-                    return false;
-                }
-                else {
+    public boolean verifierSeuil(CategorieMateriel categorieMateriel, int quantite) {
+        for (Map.Entry<CategorieMateriel, Integer> entry : this.seuil.entrySet()) {
+            if (entry.getKey().getIdCategorieMateriel() == categorieMateriel.getIdCategorieMateriel()) {
+                if (entry.getValue() > quantite) {
                     return true;
                 }
             }
         }
         return false;
-    }*/
+    }
 }
