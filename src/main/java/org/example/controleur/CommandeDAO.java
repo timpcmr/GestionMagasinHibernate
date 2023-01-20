@@ -6,7 +6,6 @@ import org.example.modele.Commande;
 import org.example.modele.Magasin;
 import org.example.modele.Materiel;
 import org.example.modele.Client;
-import org.example.vue.VueConsole;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,10 +59,7 @@ public class CommandeDAO {
 
         commande.setIdCommande(idCommande);
 
-        // Ajout de la commande à la base de données
-        em.getTransaction().begin();
-        em.persist(commande);
-        em.getTransaction().commit();
+
 
         // Actualisation du stock
         Magasin magasin = commande.getMagasin();
@@ -72,23 +68,20 @@ public class CommandeDAO {
         for (Materiel materiel : materiels.keySet()){
             magasin.MiseAJourDuStock(materiel, materiels.get(materiel));
         }
-        em.getTransaction().begin();
-        Magasin attachedMagasin = em.merge(magasin);
-        em.getTransaction().commit();
 
         // Actualisation du seuil de commandes
 
         Client client = commande.getClient();
 
         for (Materiel materiel : commande.getMateriels().keySet()){
-            //client.MiseAJourDuSeuil(materiel.getCategorie().getNomCategorieMateriel(), commande.getMateriels().get(materiel));
+            client.MiseAJourSeuil(materiel.getCategorie(), commande.getMateriels().get(materiel));
         }
         client.getCommandes().add(commande);
 
-        em.getTransaction().begin();
-        Client attachedClient = em.merge(client);
-        em.getTransaction().commit();
-
+        // Insertion de la commande
+        String stringQuery2 = "INSERT INTO Commande (idCommande, client, magasin, materiels) VALUES (:idCommande, :client, :magasin, :materiels)";
+        Query query2 = em.createQuery(stringQuery2).setParameter("idCommande", commande.getIdCommande()).setParameter("client", commande.getClient()).setParameter("magasin", commande.getMagasin()).setParameter("materiels", commande.getMateriels());
+        
 
 
     }

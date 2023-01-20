@@ -21,7 +21,7 @@ public class Materiel implements Serializable {
 
 
     //Un matériel peut avoir plusieurs composants
-    @ManyToMany(mappedBy = "materiels")
+    @ManyToMany(mappedBy = "materiels", cascade = CascadeType.ALL)
     private List<Composant> composants;
 
     //Un matériel a une catégorie
@@ -37,12 +37,12 @@ public class Materiel implements Serializable {
     private Map<Composant, Integer> quantiteComposant;
 
     //Un matériel a un matériel de substitution
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="materielSubstitution")
     private Materiel materielSubstitution;
 
     //Un matériel peut avoir plusieurs magasins
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name="materiel_magasin",
             joinColumns=@JoinColumn(name="idMateriel"),
             inverseJoinColumns=@JoinColumn(name="idMagasin"))

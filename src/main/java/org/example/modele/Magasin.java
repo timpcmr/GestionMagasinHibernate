@@ -21,11 +21,11 @@ public class Magasin implements Serializable {
     private String adresseMagasin;
 
     //Un magasin peut avoir plusieurs clients
-    @OneToMany(mappedBy = "magasin")
+    @OneToMany(mappedBy = "magasin", cascade = CascadeType.ALL)
     private List<Client> clients;
 
     //Un magasin peut avoir plusieurs matériels
-    @ManyToMany(mappedBy = "magasins")
+    @ManyToMany(mappedBy = "magasins", cascade = CascadeType.ALL)
     private List<Materiel> materiels;
 
     //Un magasin peut avoir plusieurs materiel avec une quantite

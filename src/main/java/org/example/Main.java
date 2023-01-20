@@ -49,6 +49,7 @@ public class Main {
                 afficherCommandesUtilisateur(idUtilisateur, em, vue);
             }
         }
+        em.close();
     }
 
     // Option 1

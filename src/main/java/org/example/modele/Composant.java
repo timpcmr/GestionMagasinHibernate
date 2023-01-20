@@ -17,7 +17,7 @@ public class Composant implements Serializable {
     private String nomComposant;
 
     //Un composant peut avoir plusieurs matériaux
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name="composer",
             joinColumns=@JoinColumn(name="idComposant"),
             inverseJoinColumns=@JoinColumn(name="idMateriel"))
