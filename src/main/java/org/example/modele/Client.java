@@ -1,12 +1,14 @@
 package org.example.modele;
 
 import jakarta.persistence.*;
+
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 
 @Entity
-public class Client {
+public class Client implements Serializable {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -22,7 +24,7 @@ public class Client {
 
     //Un client peut avoir un seul magasin référencé par idMagasin
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="idMagasin")
     private Magasin magasin;
 

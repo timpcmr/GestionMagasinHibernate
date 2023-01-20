@@ -1,12 +1,14 @@
 package org.example.modele;
 
 import jakarta.persistence.*;
+
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Entity
-public class Magasin {
+public class Magasin implements Serializable {
 
     // Attributs
 

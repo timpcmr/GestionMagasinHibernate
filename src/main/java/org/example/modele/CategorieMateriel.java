@@ -3,10 +3,12 @@ package org.example.modele;
 import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+
+import java.io.Serializable;
 import java.util.Map;
 
 @Entity
-public class CategorieMateriel {
+public class CategorieMateriel implements Serializable {
 
     @Id
     private int idCategorieMateriel;

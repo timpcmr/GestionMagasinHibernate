@@ -1,6 +1,8 @@
 package org.example.modele;
 
 import jakarta.persistence.*;
+
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -8,7 +10,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 @Entity
-public class Materiel {
+public class Materiel implements Serializable {
 
     // Attributs
     @Id
@@ -23,7 +25,7 @@ public class Materiel {
     private List<Composant> composants;
 
     //Un matériel a une catégorie
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="idCategorieMateriel")
     private CategorieMateriel categorie;
 

@@ -2,10 +2,11 @@ package org.example.modele;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
-public class Composant {
+public class Composant implements Serializable {
 
     // Attributs
 
