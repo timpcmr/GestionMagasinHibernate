@@ -6,7 +6,6 @@ import org.example.modele.Commande;
 import org.example.modele.Magasin;
 import org.example.modele.Materiel;
 import org.example.modele.Client;
-import org.example.vue.VueConsole;
 
 import java.util.ArrayList;
 import java.util.List;
