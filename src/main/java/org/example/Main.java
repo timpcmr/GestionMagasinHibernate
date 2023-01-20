@@ -77,7 +77,15 @@ public class Main {
         CommandeDAO commandeDAO = new CommandeDAO(em);
 
         Commande commande = vue.saisieCommande(client, magasinClient, em);
+
+        vue.afficherMessage("Votre commande est enregistrée, en voici le récapitulatif :");
+        vue.affichageCommande(commande);
+
+        System.out.println(commande.getMateriels());
+
         commandeDAO.uploadCommande(commande);
+
+
     }
 
     // Option 3

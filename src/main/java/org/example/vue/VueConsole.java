@@ -155,7 +155,7 @@ public class VueConsole implements Vue {
         String valeur = "Materiel : \n" +
                 "Identifiant = " + materiel.getIdMateriel() +
                 "\nNom = " + materiel.getNomMateriel() +
-                "\nCatégorie = " + materiel.getCategorie() + '\n';
+                "\nCatégorie = " + materiel.getCategorie().getNomCategorieMateriel() + '\n';
         for(Composant key : materiel.getQuantiteComposant().keySet()){
             valeur += affichageComposant(key) + " | Quantité : " + materiel.getQuantiteComposant().get(key) + '\n';
         }
@@ -164,14 +164,12 @@ public class VueConsole implements Vue {
     }
 
     public String affichageComposant (Composant composant){
-        String valeur = "Composant [Identifiant = " + composant.getIdComposant() + ", Nom = " + composant.getNomComposant() + "]";
-        System.out.println(valeur);
-        return valeur;
+        return "Composant [Identifiant = " + composant.getIdComposant() + ", Nom = " + composant.getNomComposant() + "]";
     }
 
     public String affichageCommande(Commande commande){
         String result = "";
-        result += "Commande de " + commande.getClient().getPrenomClient() + " " + commande.getClient().getNomClient() + " pour le magasin " + commande.getMagasin().getNomMagasin() + "\n";
+        result += "Commande n° "+ commande.getIdCommande() + " de " + commande.getClient().getPrenomClient() + " " + commande.getClient().getNomClient() + " pour le magasin " + commande.getMagasin().getNomMagasin() + "\n";
         for (Materiel key : commande.getMateriels().keySet()){
             result += key.getNomMateriel() + " | Quantité : " + commande.getMateriels().get(key) + "\n";
         }

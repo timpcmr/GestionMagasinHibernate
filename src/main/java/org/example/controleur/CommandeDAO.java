@@ -58,8 +58,6 @@ public class CommandeDAO {
         catch (jakarta.persistence.NoResultException ignored){}
 
         commande.setIdCommande(idCommande);
-        //Afficher l'id de la commande
-        System.out.println("ID de la commande : " + commande.getIdCommande());
 
         // Insertion de la commande
         em.getTransaction().begin();
