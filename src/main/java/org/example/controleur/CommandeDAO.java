@@ -62,7 +62,7 @@ public class CommandeDAO {
         Client client = commande.getClient();
 
         for (Materiel materiel : commande.getMateriels().keySet()){
-            client.MiseAJourDuSeuil(materiel.getCategorie().getNomCategorieMateriel(), commande.getMateriels().get(materiel));
+            //client.MiseAJourDuSeuil(materiel.getCategorie().getNomCategorieMateriel(), commande.getMateriels().get(materiel));
         }
 
         em.getTransaction().begin();

@@ -32,10 +32,10 @@ public class Client {
 
     //Un client a un seuil par catégorie de matériel
     @ElementCollection
-    @CollectionTable(name="seuil", joinColumns = @JoinColumn(name="idClient"), uniqueConstraints = @UniqueConstraint(columnNames = {"idClient", "idCategorieMateriel"}))
+    @CollectionTable(name="seuil", joinColumns=@JoinColumn(name="idClient"), uniqueConstraints = @UniqueConstraint(columnNames = {"idClient", "idCategorieMateriel"}))
     @MapKeyJoinColumn(name="idCategorieMateriel")
     @Column(name="seuil")
-    private Map<String, Integer> seuil;
+    private Map<CategorieMateriel, Integer> seuil;
 
 
     public Client() {
@@ -115,25 +115,25 @@ public class Client {
         this.commandes = commandes;
     }
 
-    public Map<String, Integer> getSeuil() {
+    public Map<CategorieMateriel, Integer> getSeuil() {
         return seuil;
     }
 
-    public void setSeuil(Map<String, Integer> seuil) {
+    public void setSeuil(Map<CategorieMateriel, Integer> seuil) {
         this.seuil = seuil;
     }
 
     // Méthodes
 
-    public void MiseAJourDuSeuil(String categorieMateriel, int quantite){
+    /*public void MiseAJourDuSeuil(String categorieMateriel, int quantite){
         for (String key : seuil.keySet()){
             if (key.equals(categorieMateriel)){
                 seuil.put(key, seuil.get(key) - quantite);
             }
         }
-    }
+    }*/
 
-    public boolean verificationSeuil(String categorieMateriel, int quantite){
+    /*public boolean verificationSeuil(String categorieMateriel, int quantite){
         for (String key : seuil.keySet()){
             if (key.equals(categorieMateriel)){
                 if (seuil.get(key) - quantite < 0){
@@ -145,5 +145,5 @@ public class Client {
             }
         }
         return false;
-    }
+    }*/
 }
