@@ -15,7 +15,7 @@ public class Commande implements Serializable {
     // Attributs
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private int idCommande;
 
     //Une commande n'a qu'un seul client
@@ -28,8 +28,12 @@ public class Commande implements Serializable {
     @JoinColumn(name="idMagasin")
     private Magasin magasin;
 
-    //Une commande a plusieurs materiels
-    @ManyToMany
+
+    //Une commande peut avoir plusieurs materiels
+    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(name="Quantifier",
+            joinColumns=@JoinColumn(name="idCommande"),
+            inverseJoinColumns=@JoinColumn(name="idMateriel"))
     private List<Materiel> materiels;
 
     //Chaque matériel a une quantité

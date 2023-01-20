@@ -59,10 +59,14 @@ public class CommandeDAO {
         catch (jakarta.persistence.NoResultException ignored){}
 
         commande.setIdCommande(idCommande);
+        //Afficher l'id de la commande
+        System.out.println("ID de la commande : " + commande.getIdCommande());
 
         // Ajout de la commande à la base de données
         em.getTransaction().begin();
-        em.persist(commande);
+        em.merge(commande);
+
+        //em.persist(commande);
         em.getTransaction().commit();
 
         // Actualisation du stock
