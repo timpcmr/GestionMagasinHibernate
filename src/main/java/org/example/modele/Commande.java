@@ -29,7 +29,7 @@ public class Commande implements Serializable {
     private Magasin magasin;
 
     //Une commande a plusieurs materiels
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.MERGE)
     private List<Materiel> materiels;
 
     //Chaque matériel a une quantité
