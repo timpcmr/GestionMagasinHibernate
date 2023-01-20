@@ -17,6 +17,9 @@ public class Composant {
 
     //Un composant peut avoir plusieurs matériaux
     @ManyToMany
+    @JoinTable(name="composer",
+            joinColumns=@JoinColumn(name="idComposant"),
+            inverseJoinColumns=@JoinColumn(name="idMateriel"))
     private List<Materiel> materiels;
 
 

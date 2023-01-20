@@ -180,10 +180,11 @@ public class VueConsole {
 
     public static String affichageCommande(Commande commande){
         String result = "";
-        result += "Commande de" + commande.getClient().getPrenomClient() + commande.getClient().getNomClient() + " pour le magasin " + commande.getMagasin().getNomMagasin() + "\n";
+        result += "Commande de " + commande.getClient().getPrenomClient() + " " + commande.getClient().getNomClient() + " pour le magasin " + commande.getMagasin().getNomMagasin() + "\n";
         for (Materiel key : commande.getMateriels().keySet()){
             result += key.getNomMateriel() + " | Quantité : " + commande.getMateriels().get(key) + "\n";
         }
+        System.out.println(result);
         return result;
     }
 }

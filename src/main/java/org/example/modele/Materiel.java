@@ -29,9 +29,9 @@ public class Materiel {
 
     //Chaque matériel a une quantité de composant
     @ElementCollection
-    @CollectionTable(name="quantite_composant", joinColumns = @JoinColumn(name="idMateriel"), uniqueConstraints = @UniqueConstraint(columnNames = {"idMateriel", "idComposant"}))
+    @CollectionTable(name="composer", joinColumns = @JoinColumn(name="idMateriel"), uniqueConstraints = @UniqueConstraint(columnNames = {"idMateriel", "idComposant"}))
     @MapKeyJoinColumn(name="idComposant")
-    @Column(name="quantite")
+    @Column(name="quantiteComposant")
     private Map<Composant, Integer> quantiteComposant;
 
     //Un matériel a un matériel de substitution
@@ -41,6 +41,9 @@ public class Materiel {
 
     //Un matériel peut avoir plusieurs magasins
     @ManyToMany
+    @JoinTable(name="materiel_magasin",
+            joinColumns=@JoinColumn(name="idMateriel"),
+            inverseJoinColumns=@JoinColumn(name="idMagasin"))
     private List<Magasin> magasins;
 
 

@@ -19,10 +19,12 @@ public class Commande {
 
     //Une commande n'a qu'un seul client
     @ManyToOne
+    @JoinColumn(name="idClient")
     private Client client;
 
     //Une commande n'a qu'un seul magasin
     @ManyToOne
+    @JoinColumn(name="idMagasin")
     private Magasin magasin;
 
     //Une commande a plusieurs materiels
@@ -33,7 +35,7 @@ public class Commande {
     @ElementCollection
     @CollectionTable(name="quantifier", joinColumns=@JoinColumn(name="idCommande"), uniqueConstraints = @UniqueConstraint(columnNames = {"idCommande", "idMateriel"}))
     @MapKeyJoinColumn(name="idMateriel")
-    @Column(name="quantite")
+    @Column(name="quantiteCommande")
     private Map<Materiel, Integer> quantiteMateriel;
 
     // Constructeurs
