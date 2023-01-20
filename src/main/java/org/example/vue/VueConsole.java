@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-public class VueConsole {
-    public static void afficherMenu() {
+public class VueConsole implements Vue {
+    public void afficherMenu() {
         System.out.println("/ ------------------------------Choisir une option--------------------------- \\");
         System.out.println("* 1. Afficher le contenu d'un magasin                                         *");
         System.out.println("* 2. Créer une commande cliente avec les détails du client et des matériaux   *");
@@ -23,44 +23,31 @@ public class VueConsole {
     }
 
     // INTERACTIONS AVEC L'UTILISATEUR
-    public static String choixMagasin(){
+    public String choixMagasin(){
         System.out.println("Entrez le nom du magasin dont vous souhaitez voir le contenu : ");
         Scanner scanner1 = new Scanner(System.in);
         scanner1.useDelimiter(System.lineSeparator());
         return scanner1.nextLine();
     }
 
-    public static void arretProgramme(String message){
+    public void arretProgramme(String message){
         System.out.println("Arret du programme : " + message);
         System.exit(0);
     }
 
-    public static String[] recupererQuantiteMateriel(){
-        System.out.println("De quel matériel souhaitez-vous voir la quantité ? ");
-        Scanner scanner3 = new Scanner(System. in);
-        String nomMateriel2 = scanner3.nextLine();
-        System.out.println("Quel magasin vouez-vous voir le stock de ce matériel ?");
-        String nomMagasin2 = scanner3.nextLine();
-        return new String[]{nomMateriel2, nomMagasin2};
-    }
-
-    public static void afficherQuantiteMateriel(String nomMateriel, String nomMagasin, int quantite){
-        System.out.println("Le materiel " + nomMateriel + " est disponible en quantité " + quantite + " dans le magasin " + nomMagasin);
-    }
-
-    public static String recupererTexte(String message){
+    public String recupererTexte(String message){
         System.out.println(message);
         Scanner scanner4 = new Scanner(System.in);
         return scanner4.nextLine();
     }
 
-    public static int recupererEntier(String message){
+    public int recupererEntier(String message){
         System.out.println(message);
         Scanner scanner5 = new Scanner(System.in);
         return scanner5.nextInt();
     }
 
-    public static Commande saisieCommande (Client client, Magasin magasin, EntityManager em) {
+    public Commande saisieCommande (Client client, Magasin magasin, EntityManager em) {
         Map<Materiel, Integer> materiauxCommande = new HashMap<>();
         Scanner scanner = new Scanner(System.in);
         MaterielDAO materielDAO = new MaterielDAO(em);
@@ -108,29 +95,29 @@ public class VueConsole {
     }
 
     // AFFICHAGE DES ERREURS
-    public static void afficherException(Exception e){
+    public void afficherException(Exception e){
         System.out.println("Une exception a été levée : " + e.getMessage());
     }
 
-    public static void afficherAlerte(String message){
+    public void afficherAlerte(String message){
         System.out.println("Une erreur a été levée : " + message);
     }
 
-    public static void afficherMessage(String message){
+    public void afficherMessage(String message){
         System.out.println(message);
     }
 
     // AFFICHAGE DE LISTES
 
-    public static String afficherListe(List<?> liste, Class<?> classe){
+    public String afficherListe(List<?> liste, Class<?> classe){
         String message = "Voici la liste des objets de la classe" + classe.getSimpleName() + " : ";
         for (var o : liste){
             switch (classe.getSimpleName()){
-                case "Magasin" -> {VueConsole.affichageMagasin((Magasin) o);}
-                case "Client" -> {VueConsole.affichageClient((Client) o);}
-                case "Materiel" -> {VueConsole.affichageMateriel((Materiel) o);}
-                case "Commande" -> {VueConsole.affichageCommande((Commande) o);}
-                case "Composant" -> {VueConsole.affichageComposant((Composant) o);}
+                case "Magasin" -> {affichageMagasin((Magasin) o);}
+                case "Client" -> {affichageClient((Client) o);}
+                case "Materiel" -> {affichageMateriel((Materiel) o);}
+                case "Commande" -> {affichageCommande((Commande) o);}
+                case "Composant" -> {affichageComposant((Composant) o);}
             }
         }
         return message;
@@ -138,7 +125,7 @@ public class VueConsole {
 
     // AFFICHAGE DES OBJETS
 
-    public static String affichageClient(Client client){
+    public String affichageClient(Client client){
         String objet = "\n\n/-------------"+ client.getPrenomClient() + " " + client.getNomClient() + "------------\\ \n" +
                 "* Client n°" + client.getIdClient() + "\n" +
                 "* Adresse : " + client.getAdresseClient() + "\n" +
@@ -149,7 +136,7 @@ public class VueConsole {
         return objet;
     }
 
-    public static String affichageMagasin(Magasin magasin){
+    public String affichageMagasin(Magasin magasin){
         String result = "\n\n/ Magasin : " + magasin.getNomMagasin() + " - (Identifiant : "+ magasin.getIdMagasin() + ") - " + magasin.getAdresseMagasin() + " \\ \n"
                 + "Stock : \n";
         if(magasin.getQuantiteMateriel().isEmpty()){
@@ -164,7 +151,7 @@ public class VueConsole {
         return result;
     }
 
-    public static String affichageMateriel(Materiel materiel){
+    public String affichageMateriel(Materiel materiel){
         String valeur = "Materiel : \n" +
                 "Identifiant = " + materiel.getIdMateriel() +
                 "\nNom = " + materiel.getNomMateriel() +
@@ -176,13 +163,13 @@ public class VueConsole {
         return valeur;
     }
 
-    public static String affichageComposant (Composant composant){
+    public String affichageComposant (Composant composant){
         String valeur = "Composant [Identifiant = " + composant.getIdComposant() + ", Nom = " + composant.getNomComposant() + "]";
         System.out.println(valeur);
         return valeur;
     }
 
-    public static String affichageCommande(Commande commande){
+    public String affichageCommande(Commande commande){
         String result = "";
         result += "Commande de " + commande.getClient().getPrenomClient() + " " + commande.getClient().getNomClient() + " pour le magasin " + commande.getMagasin().getNomMagasin() + "\n";
         for (Materiel key : commande.getMateriels().keySet()){
