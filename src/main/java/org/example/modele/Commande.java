@@ -28,12 +28,6 @@ public class Commande implements Serializable {
     @JoinColumn(name="idMagasin")
     private Magasin magasin;
 
-    //Une commande peut avoir plusieurs materiels
-    @ManyToMany(cascade = CascadeType.MERGE)
-    @JoinTable(name="Quantifier",
-            joinColumns=@JoinColumn(name="idCommande"),
-            inverseJoinColumns=@JoinColumn(name="idMateriel"))
-    private List<Materiel> materiels;
 
     //Chaque matériel a une quantité
     @ElementCollection
@@ -48,7 +42,6 @@ public class Commande implements Serializable {
         this.client = null;
         this.magasin = null;
         this.quantiteMateriel = new HashMap<>();
-        this.materiels = new ArrayList<>();
     }
 
     public Commande(Client client, Magasin magasin, Map<Materiel, Integer> quantiteMateriel) {
@@ -60,8 +53,8 @@ public class Commande implements Serializable {
             this.quantiteMateriel.put(m, quantiteMateriel.get(m));
         }
 
-        this.materiels = new ArrayList<>();
-        this.materiels.addAll(quantiteMateriel.keySet());
+        //this.materiels = new ArrayList<>();
+        //this.materiels.addAll(quantiteMateriel.keySet());
     }
 
     public Commande(Commande commande) {
@@ -69,7 +62,6 @@ public class Commande implements Serializable {
         this.client = commande.client;
         this.magasin = commande.magasin;
         this.quantiteMateriel = commande.quantiteMateriel;
-        this.materiels = commande.materiels;
     }
 
     // Getters et Setters
