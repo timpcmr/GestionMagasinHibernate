@@ -138,7 +138,7 @@ public class Client implements Serializable {
     public boolean verifierSeuil(CategorieMateriel categorieMateriel, int quantite) {
         for (Map.Entry<CategorieMateriel, Integer> entry : this.seuil.entrySet()) {
             if (entry.getKey().getIdCategorieMateriel() == categorieMateriel.getIdCategorieMateriel()) {
-                if (entry.getValue() > quantite) {
+                if (entry.getValue() >= quantite) {
                     return true;
                 }
             }

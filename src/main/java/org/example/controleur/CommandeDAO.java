@@ -45,7 +45,7 @@ public class CommandeDAO {
         return commandes;
     }
 
-    public void uploadCommande (Commande commande) {
+    public int uploadCommande (Commande commande) {
 
         // Récupération d'un id de commande disponible
         int idCommande = 0;
@@ -89,6 +89,8 @@ public class CommandeDAO {
         em.getTransaction().begin();
         Client attachedClient = em.merge(client);
         em.getTransaction().commit();
+
+        return idCommande;
 
     }
 }
