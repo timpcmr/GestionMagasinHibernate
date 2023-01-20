@@ -4,7 +4,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import org.example.modele.Magasin;
 
-import java.util.List;
 
 public class MagasinDAO {
     private final EntityManager em;

@@ -19,12 +19,12 @@ public class Commande implements Serializable {
     private int idCommande;
 
     //Une commande n'a qu'un seul client
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="idClient")
     private Client client;
 
     //Une commande n'a qu'un seul magasin
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="idMagasin")
     private Magasin magasin;
 
@@ -51,7 +51,12 @@ public class Commande implements Serializable {
     public Commande(Client client, Magasin magasin, Map<Materiel, Integer> quantiteMateriel) {
         this.client = client;
         this.magasin = magasin;
-        this.quantiteMateriel = quantiteMateriel;
+
+        this.quantiteMateriel = new HashMap<>();
+        for (Materiel m : quantiteMateriel.keySet()) {
+            this.quantiteMateriel.put(m, quantiteMateriel.get(m));
+        }
+
         this.materiels = new ArrayList<>();
         this.materiels.addAll(quantiteMateriel.keySet());
     }

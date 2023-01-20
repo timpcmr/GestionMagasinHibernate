@@ -81,7 +81,7 @@ public class VueConsole {
 
                 // Vérification de la quantité disponible
                 Materiel newMateriel = magasin.verifyDisponibility(materielSelectionne, quantite);
-                //boolean respectSeuil = client.verificationSeuil(newMateriel.getCategorie().getNomCategorieMateriel(), quantite);
+                boolean respectSeuil = client.verifierSeuil(newMateriel.getCategorie(), quantite);
 
                 if (!newMateriel.equals(materielSelectionne) && newMateriel != null) {
                     System.out.println("Le materiel sélectionné n'était pas disponible en quantité suffisante, il a été substitué");
@@ -90,11 +90,11 @@ public class VueConsole {
                 if (newMateriel == null) {
                     System.out.println("Le matériel n'est pas disponible en quantité suffisante dans ce magasin");
                 }else{
-                    /*if (respectSeuil) {
+                    if (respectSeuil) {
                         materiauxCommande.put(newMateriel, quantite);
                     } else {
                         System.out.println("Le matériel n'a pas été ajouté à la commande car le seuil de commande a été atteint");
-                    }*/
+                    }
                 }
                 System.out.println("Entrez un nouveau nom de matériel ou tapez fin pour terminer votre commande : ");
             }

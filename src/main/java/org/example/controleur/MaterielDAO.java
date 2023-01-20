@@ -2,11 +2,7 @@ package org.example.controleur;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
-import org.example.modele.Composant;
 import org.example.modele.Materiel;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MaterielDAO {
     private final EntityManager em;

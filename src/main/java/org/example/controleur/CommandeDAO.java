@@ -6,6 +6,7 @@ import org.example.modele.Commande;
 import org.example.modele.Magasin;
 import org.example.modele.Materiel;
 import org.example.modele.Client;
+import org.example.vue.VueConsole;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,10 +48,21 @@ public class CommandeDAO {
 
     public void uploadCommande (Commande commande) {
 
+        // Récupération d'un id de commande disponible
+        int idCommande = 0;
+        String stringQuery = "SELECT max(c.idCommande) FROM Commande c";
+        Query query = em.createQuery(stringQuery);
+        try{
+            idCommande = (int) query.getSingleResult();
+            idCommande++;
+        }
+        catch (jakarta.persistence.NoResultException ignored){}
+
+        commande.setIdCommande(idCommande);
+
         // Ajout de la commande à la base de données
         em.getTransaction().begin();
-        Commande commandePersist = new Commande(commande);
-        em.persist(commandePersist);
+        em.persist(commande);
         em.getTransaction().commit();
 
         // Actualisation du stock
@@ -71,6 +83,7 @@ public class CommandeDAO {
         for (Materiel materiel : commande.getMateriels().keySet()){
             //client.MiseAJourDuSeuil(materiel.getCategorie().getNomCategorieMateriel(), commande.getMateriels().get(materiel));
         }
+        client.getCommandes().add(commande);
 
         em.getTransaction().begin();
         Client attachedClient = em.merge(client);
