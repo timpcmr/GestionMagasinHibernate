@@ -29,7 +29,7 @@ public class Client implements Serializable {
     private Magasin magasin;
 
     //Un client peut avoir plusieurs commandes
-    @OneToMany(mappedBy = "client")
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private List<Commande> commandes;
 
     //Un client a un seuil par catégorie de matériel

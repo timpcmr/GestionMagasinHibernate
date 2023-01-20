@@ -28,7 +28,6 @@ public class Commande implements Serializable {
     @JoinColumn(name="idMagasin")
     private Magasin magasin;
 
-
     //Une commande peut avoir plusieurs materiels
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name="Quantifier",

@@ -6,7 +6,6 @@ import org.example.modele.Commande;
 import org.example.modele.Magasin;
 import org.example.modele.Materiel;
 import org.example.modele.Client;
-import org.example.vue.VueConsole;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +61,7 @@ public class CommandeDAO {
         //Afficher l'id de la commande
         System.out.println("ID de la commande : " + commande.getIdCommande());
 
-        // Ajout de la commande à la base de données
+        // Insertion de la commande
         em.getTransaction().begin();
         em.merge(commande);
 
@@ -85,15 +84,13 @@ public class CommandeDAO {
         Client client = commande.getClient();
 
         for (Materiel materiel : commande.getMateriels().keySet()){
-            //client.MiseAJourDuSeuil(materiel.getCategorie().getNomCategorieMateriel(), commande.getMateriels().get(materiel));
+            client.MiseAJourSeuil(materiel.getCategorie(), commande.getMateriels().get(materiel));
         }
         client.getCommandes().add(commande);
 
         em.getTransaction().begin();
         Client attachedClient = em.merge(client);
         em.getTransaction().commit();
-
-
 
     }
 }
