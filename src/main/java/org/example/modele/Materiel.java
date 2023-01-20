@@ -141,9 +141,4 @@ public class Materiel {
         Materiel materiel = (Materiel) o;
         return idMateriel == materiel.idMateriel && nomMateriel.equals(materiel.nomMateriel) && categorie.equals(materiel.categorie) && Objects.equals(materielSubstitution, materiel.materielSubstitution);
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(idMateriel, nomMateriel, categorie, materielSubstitution);
-    }
 }

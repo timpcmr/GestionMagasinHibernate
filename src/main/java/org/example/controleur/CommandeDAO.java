@@ -26,10 +26,16 @@ public class CommandeDAO {
 
         List<Commande> commandes = new ArrayList<>();
 
-        String stringQuery = "from Commande where Commande.client = :client";
+        String stringQuery = "SELECT c FROM Commande c JOIN c.client cl WHERE cl.idClient = :idClient";
         Query query = em.createQuery(stringQuery).setParameter("client", idClient);
+        List<Object[]> resultList;
+        try{
+            resultList = query.getResultList();
+        }
+        catch (jakarta.persistence.NoResultException e){
+            return null;
+        }
 
-        List<Object[]> resultList = query.getResultList();
 
         for (Object[] result : resultList){
             Commande commande = (Commande) result[1];

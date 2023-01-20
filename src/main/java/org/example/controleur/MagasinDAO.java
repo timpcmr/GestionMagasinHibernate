@@ -18,16 +18,24 @@ public class MagasinDAO {
     }
 
     public Magasin getMagasinByClient(int id){
-        String stringQuery = "from Magasin where Magasin.idMagasin = :id";
+        String stringQuery = "SELECT m FROM Magasin m JOIN m.clients c WHERE c.idClient = :id";
         Query query = em.createQuery(stringQuery).setParameter("id", id);
 
-        return (Magasin)query.getSingleResult();
+        try {
+            return (Magasin) query.getSingleResult();
+        } catch (jakarta.persistence.NoResultException e) {
+            return null;
+        }
     }
 
     public Magasin findMagasinByName(String nom){
-        String stringQuery = "from Magasin where Magasin.nomMagasin = :nom";
+        String stringQuery = "SELECT m FROM Magasin m WHERE m.nomMagasin = :nom";
         Query query = em.createQuery(stringQuery).setParameter("nom", nom);
 
-        return (Magasin)query.getSingleResult();
+        try {
+            return (Magasin) query.getSingleResult();
+        } catch (jakarta.persistence.NoResultException e) {
+            return null;
+        }
     }
 }

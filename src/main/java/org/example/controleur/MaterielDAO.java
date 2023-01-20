@@ -21,10 +21,14 @@ public class MaterielDAO {
 
     public Materiel findByName (String nom){
         Materiel materiel;
-        String queryString = "from Materiel where Materiel.nomMateriel = :nom";
+        String queryString = "SELECT m FROM Materiel m WHERE m.nomMateriel = :nom";
         Query query = em.createQuery(queryString).setParameter("nom", nom);
 
-        return (Materiel) query.getSingleResult();
+        try {
+            return (Materiel) query.getSingleResult();
+        } catch (jakarta.persistence.NoResultException e) {
+            return null;
+        }
     }
 
 }

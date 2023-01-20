@@ -56,7 +56,7 @@ public class Main {
         Magasin magasinClient = magasinDAO.findMagasinByName(nomMagasin);
 
         if (magasinClient == null) {
-            VueConsole.afficherAlerte("Le client n'a pas de magasin");
+            VueConsole.afficherAlerte("Le magasin n'existe pas");
         }
         else{
             VueConsole.affichageMagasin(magasinClient);
@@ -89,7 +89,7 @@ public class Main {
         else {
             for (Materiel materiel : magasin.getQuantiteMateriel().keySet()) {
                 if (materiel.getNomMateriel().equals(nomMateriel)) {
-                    VueConsole.afficherAlerte("Il y a " + magasin.getQuantiteMateriel().get(materiel) + " " + nomMateriel + " dans le magasin " + nomMagasin);
+                    VueConsole.afficherMessage("Il y a " + magasin.getQuantiteMateriel().get(materiel) + " " + nomMateriel + " dans le magasin " + nomMagasin);
                     return;
                 }
             }

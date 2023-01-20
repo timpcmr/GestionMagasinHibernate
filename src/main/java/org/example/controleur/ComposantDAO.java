@@ -18,12 +18,14 @@ public class ComposantDAO {
     public Composant findComposantByName (String nom) {
 
         Composant composant;
-        String queryString = "from Composant where Composant.nomComposant = :nom";
+        String queryString = "SELECT c FROM Composant c WHERE c.nomComposant = :nom";
         Query query = em.createQuery(queryString).setParameter("nom", nom);
 
-        composant = (Composant) query.getSingleResult();
-
-        return composant;
+        try {
+            return (Composant) query.getSingleResult();
+        } catch (jakarta.persistence.NoResultException e) {
+            return null;
+        }
     }
 
 
