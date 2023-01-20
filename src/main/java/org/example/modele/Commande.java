@@ -2,13 +2,14 @@ package org.example.modele;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
 
 @Entity
-public class Commande {
+public class Commande implements Serializable {
 
 
     // Attributs
@@ -51,6 +52,14 @@ public class Commande {
         this.quantiteMateriel = quantiteMateriel;
         this.materiels = new ArrayList<>();
         this.materiels.addAll(quantiteMateriel.keySet());
+    }
+
+    public Commande(Commande commande) {
+        this.idCommande = commande.idCommande;
+        this.client = commande.client;
+        this.magasin = commande.magasin;
+        this.quantiteMateriel = commande.quantiteMateriel;
+        this.materiels = commande.materiels;
     }
 
     // Getters et Setters

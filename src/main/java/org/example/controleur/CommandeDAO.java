@@ -49,7 +49,8 @@ public class CommandeDAO {
 
         // Ajout de la commande à la base de données
         em.getTransaction().begin();
-        em.persist(commande);
+        Commande commandePersist = new Commande(commande);
+        em.persist(commandePersist);
         em.getTransaction().commit();
 
         // Actualisation du stock

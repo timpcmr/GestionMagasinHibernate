@@ -70,8 +70,12 @@ public class VueConsole {
         while (!nomMateriel.equals("fin")) {
             Materiel materielSelectionne = materielDAO.findByName(nomMateriel);
 
+            if (materielSelectionne == null) {
+                System.out.println("Ce matériel n'est pas disponible dans ce magasin. Entrez un nouveau nom de matériel ou tapez fin pour terminer votre commande : ");
+            }
+
             // Vérification de l'existence du matériel
-            if(magasin.getQuantiteMateriel().containsKey(materielSelectionne)){
+            else if(magasin.isInStock(materielSelectionne)) {
                 System.out.println("Combien en souhaitez-vous ? ");
                 int quantite = scanner.nextInt();
 

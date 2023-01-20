@@ -142,6 +142,15 @@ public class Magasin {
         return null;
     }
 
+    public boolean isInStock (Materiel materiel){
+        for (Materiel m : this.getQuantiteMateriel().keySet()){
+            if (materiel.equals(m)){
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 
 }
